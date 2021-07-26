@@ -43,14 +43,30 @@ public class App {
 				Article article = new Article(id,regDate, title,body, 0);
 				articles.add(article);
 				
-			} else if (command.equals("article list")){
+			} else if (command.startsWith("article list")){
+				String searchKeyword = command.substring("article list".length()).trim();
+				
+				List<Article> forListArticles = articles;
+				
+				if (searchKeyword.length() > 0) {
+					forListArticles = new ArrayList<>();
+					
+					for(Article article : articles) {
+						if(article.title.contains(searchKeyword)) {
+							forListArticles.add(article);
+						}
+					}
+				}
+				
 				if (articles.size()==0) {
 					System.out.println("게시글이 없습니다.");
 					continue;
 				} 
 				System.out.println("번호  |  조회수  |  제목");
-				for(int i=0;i<articles.size();i++) {
-					Article article = articles.get(i);
+//				for(int i=0;i<articles.size();i++) {
+//					Article article = articles.get(i);
+				for(int i=0;i<forListArticles.size();i++) {
+					Article article = forListArticles.get(i);
 					System.out.printf("%4d|%4d|%4s\n",article.id ,article.hit, article.title);
 				}
 			} else if (command.startsWith("article detail ")){
