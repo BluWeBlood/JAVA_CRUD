@@ -56,18 +56,9 @@ public class App {
 			} else if (command.startsWith("article detail ")){
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
-				
-//				boolean foundArticle = false;
-				Article foundArticle = null;
-				
-				for (int i =0;i<articles.size();i++) {
-					Article article = articles.get(i);
 					
-					if (article.id == id) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticlebyId(id);
+				
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 					continue;
@@ -83,16 +74,9 @@ public class App {
 			} else if (command.startsWith("article modify ")) {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
-				Article foundArticle = null;
+
+				Article foundArticle = getArticlebyId(id);
 				
-				for (int i=0;i<articles.size();i++) {
-					Article article = articles.get(i);
-					
-					if (article.id == id) {
-						foundArticle = article;
-						break;
-					}
-				}
 				if (foundArticle == null) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
@@ -110,17 +94,7 @@ public class App {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 				
-//				Article foundArticle = null;
-				int foundIndex = -1;
-				
-				for (int i =0;i<articles.size();i++) {
-					Article article = articles.get(i);
-					
-					if (article.id == id) {
-						foundIndex = i;
-						break;
-					}
-				}
+				int foundIndex = getArticleIndexbyId(id);
 				if (foundIndex == -1) {
 					System.out.printf("%d번 게시물은 존재하지 않습니다\n", id);
 					continue;
@@ -131,9 +105,33 @@ public class App {
 				System.out.printf("%s는 존재하지 않는 명령어입니다.\n",command);
 			}
 		} 
-		
+		sc.close();
 	}
-
+	private int getArticleIndexbyId(int id) {
+		int i = 0;
+		
+		for(Article article:articles) {
+			if(article.id==id) {
+				return i;
+			}
+			i++;
+		}
+		return i;
+	}	
+	private Article getArticlebyId(int id) {
+//		for (int i =0;i<articles.size();i++) {
+//			Article article = articles.get(i);
+//			
+//			if (article.id == id) {
+//				return article;
+//			}
+//		}
+		int index = getArticleIndexbyId(id);
+		if(index != -1) {
+			return articles.get(index);
+		}
+		return null;
+	}
 	private static void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다.");
 
