@@ -4,14 +4,20 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
-import crud.dto.Article;
+
+import crud.controller.ArticleController;
+import crud.controller.MemberController;
 import crud.dto.Util.Util;
+import crud.dto.Article;
+import crud.dto.Member;
 
 public class App {
 	private static List<Article> articles;
+	private List<Member> members;
 	
 	public App() {
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 	
 	public void start() {
@@ -19,6 +25,9 @@ public class App {
 		makeTestData();
 		Scanner sc = new Scanner(System.in);
 //		List<Article> articles = new ArrayList<>();
+
+		MemberController memberController = new MemberController(sc, members);
+		ArticleController articleController = new ArticleController();
 		
 		while(true) {
 			System.out.printf("명령어) ");
@@ -30,8 +39,10 @@ public class App {
 			if (command.equals("system exit")) {
 				System.out.println("==프로그램 종료==");
 				break;
-			}
-			if(command.equals("article write")) {
+			} if (command.equals("member join")) {
+				memberController.doJoin();
+				
+			} else if(command.equals("article write")) {
 				int id = articles.size() + 1;
 				String regDate = Util.getNowDateStr();
 				System.out.printf("제목 : ");
@@ -123,6 +134,7 @@ public class App {
 		} 
 		sc.close();
 	}
+	
 	private int getArticleIndexbyId(int id) {
 		int i = 0;
 		
@@ -142,7 +154,7 @@ public class App {
 //				return article;
 //			}
 //		}
-		int index = getArticleIndexbyId(id);
+		int index = getArticleIndexbyId(id)	;
 		if(index != -1) {
 			return articles.get(index);
 		}
