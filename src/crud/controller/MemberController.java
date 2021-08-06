@@ -1,10 +1,9 @@
 package crud.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import crud.dto.Article;
+import crud.container.Container;
 import crud.dto.Member;
 import crud.dto.Util.Util;
 
@@ -13,11 +12,10 @@ public class MemberController extends Controller{
 	private List<Member> members;
 	private String command;
 	private String actionMethodName;
-	private Member loginedMember;
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		members = new ArrayList<Member>();
+		members = Container.memberDao.members;
 	}
 	
 	public void doAction(String command, String actionMethodName) {
@@ -38,14 +36,7 @@ public class MemberController extends Controller{
 			break;
 		}
 	}
-
-	private void doLogin() {
-		//로그인 확인
-		if (isLogined()) {
-			System.out.println("이미 로그인 되어있습니다.");
-			return;
-		}
-		
+	private void doLogin() {		
 		System.out.printf("로그인 아이디 : ");
 		String loginId = sc.nextLine();
 		System.out.printf("로그인 비밀번호 : ");
@@ -66,14 +57,8 @@ public class MemberController extends Controller{
 		loginedMember = member;			
 		System.out.printf("로그인 성공!, %s님 환영합니다.\n",loginedMember.name);		
 	}
-	private boolean isLogined() {
-		return loginedMember != null;
-	}
 	private void doLogout() {
-		if(isLogined() == false) {
-			System.out.println("로그인 상태가 아닙니다.");
-			return;
-		}
+
 
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
@@ -141,7 +126,7 @@ public class MemberController extends Controller{
 		Member member = new Member(id, regDate, loginId, loginPw, name);
 		members.add(member);
 		System.out.printf("%d번 회원이 생성되었습니다.\n", id);
-	}
+	}	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
 		
